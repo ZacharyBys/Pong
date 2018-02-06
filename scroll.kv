@@ -1,0 +1,26 @@
+
+            
+<ScrollGame>
+    jumper: game_jumper
+
+    canvas:
+        Rectangle:
+            pos: 0, 0
+            size: self.width, 35
+
+    Label:
+        font_size: 70  
+        center_x: root.width / 2
+        top: root.top - 50
+        text: "SCROLLER"
+    
+    Jumper:
+        pos: 45,self.jumpvalue
+        id: game_jumper
+
+<Jumper>:
+    size: 25, 50
+    canvas:
+        Rectangle:
+            pos:self.pos
+            size:self.size
