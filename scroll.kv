@@ -2,25 +2,56 @@
             
 <ScrollGame>
     jumper: game_jumper
+    regularenemy: reg_enemy
+    flyingenemy: fly_enemy
 
     canvas:
         Rectangle:
             pos: 0, 0
-            size: self.width, 60
+            size: self.width, 150
+        Rectangle:
+            source: 'ladder.png'
+            pos: 50, 5
+            size: 70, 200
 
     Label:
         font_size: 70  
         center_x: root.width / 2
         top: root.top - 50
-        text: "SCROLLER"
+        text: root.jumper.label
     
     Jumper:
-        pos: 45,self.jumpvalue
+        pos: 35,self.jumpvalue
         id: game_jumper
+    
+    RegularEnemy:
+        pos: self.movePosition, 150
+        id: reg_enemy
+    
+    FlyingEnemy
+        pos: self.movePosition, 210
+        id: fly_enemy
 
 <Jumper>:
-    size: 25, 50
+    size: 80, 110
     canvas:
         Rectangle:
+            source: 'bionicle.png'
+            pos:self.pos
+            size:self.size
+
+<RegularEnemy>:
+    size: 60, 75
+    canvas:
+        Ellipse:
+            source: 'flying_doge.png'
+            pos:self.pos
+            size:self.size
+
+<FlyingEnemy>:
+    size: 60, 75
+    canvas:
+        Ellipse:
+            source: 'flying_doge.png'
             pos:self.pos
             size:self.size

@@ -8,6 +8,8 @@ from kivy.clock import Clock
 
 class ScrollGame(Widget):
     jumper = ObjectProperty(None)
+    regularenemy = ObjectProperty(None)
+    flyingenemy = ObjectProperty(None)
     moveVal = NumericProperty(0)
     
     def __init__(self, **kwargs):
@@ -27,23 +29,58 @@ class ScrollGame(Widget):
         return True
 
     def update(self, dt):
-        if (self.moveVal == 1):
-            if (self.jumper.jump() == 1):
-                self.moveVal = 0
-        elif (self.moveVal == 2):
-            if (self.jumper.crouch() == 1):
-                self.moveVal = 0
+        if (not self.jumper.check_death(self.regularenemy) == 1 and not self.jumper.check_death(self.flyingenemy)):
+            if (self.moveVal == 1):
+                if (self.jumper.jump() == 1):
+                    self.moveVal = 0
+            elif (self.moveVal == 2):
+                if (self.jumper.crouch() == 1):
+                    self.moveVal = 0
+            self.regularenemy.move()
+            self.flyingenemy.move()
+            self.jumper.check_death(self.regularenemy)
+            self.jumper.check_death(self.flyingenemy)
+
+class RegularEnemy(Widget):
+    movePosition = NumericProperty(800)
+    moveSpeed = NumericProperty(2)
+
+    def move(self):
+        self.movePosition -= self.moveSpeed
+        if (self.movePosition < -50):
+            self.respawn()
+            return 1
+
+    def respawn(self):
+        self.movePosition = 1600
+
+class FlyingEnemy(Widget):
+    movePosition = NumericProperty(1600)
+    moveSpeed = NumericProperty(2)
+
+    def move(self):
+        self.movePosition -= self.moveSpeed
+        if (self.movePosition < -50):
+            self.respawn()
+            return 1
+
+    def respawn(self):
+        self.movePosition = 1600
+
+
 
 class Jumper(Widget):
-    jumpvalue = NumericProperty(60)
+    jumpvalue = NumericProperty(150)
     jumpBool = NumericProperty(1)
     crouchBool = NumericProperty(1)
-    jumpHeight = NumericProperty(135)
+    jumpHeight = NumericProperty(350)
     crouchHeight = NumericProperty(20)
-    floorHeight = NumericProperty(60)
+    floorHeight = NumericProperty(150)
 
-    jumpSpeed = NumericProperty(2)
-    crouchSpeed = NumericProperty(1)
+    jumpSpeed = NumericProperty(2.5)
+    crouchSpeed = NumericProperty(2)
+
+    label = 'SCROLLER'
 
     def jump(self):
         if (self.jumpBool == 1):
@@ -77,6 +114,10 @@ class Jumper(Widget):
             self.jumpvalue += self.crouchSpeed
         else: 
             self.crouchBool = 1
+            return 1
+
+    def check_death(self, enemy):
+        if self.collide_widget(enemy):
             return 1
 
 class ScrollApp(App):
