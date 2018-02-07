@@ -7,15 +7,22 @@ from kivy.vector import Vector
 from kivy.clock import Clock                              
 
 class ScrollGame(Widget):
+    score = NumericProperty(0)
+    secondUpdate = NumericProperty(0)
     jumper = ObjectProperty(None)
     regularenemy = ObjectProperty(None)
     flyingenemy = ObjectProperty(None)
     moveVal = NumericProperty(0)
-    
+    regenemies = []
+    flyingenemies = []
+
     def __init__(self, **kwargs):
         super(ScrollGame, self).__init__(**kwargs)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+        self.regenemies.append(self.regularenemy)
+        self.flyingenemies.append(self.flyingenemy)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
@@ -36,10 +43,21 @@ class ScrollGame(Widget):
             elif (self.moveVal == 2):
                 if (self.jumper.crouch() == 1):
                     self.moveVal = 0
-            self.regularenemy.move()
-            self.flyingenemy.move()
-            self.jumper.check_death(self.regularenemy)
-            self.jumper.check_death(self.flyingenemy)
+            
+            for enemy in self.regenemies:
+                if (enemy.move() == 1):
+                    self.regenemies.remove(enemy)
+                self.jumper.check_death(enemy)
+
+            for enemy in self.flyingenemies:
+                if (enemy.move() == 1):
+                    self.flyingenemies.remove(enemy)
+                self.jumper.check_death(enemy)
+
+            self.secondUpdate += 1
+            if (not self.secondUpdate < 5):
+                self.score += 1
+                self.secondUpdate = 0
 
 class RegularEnemy(Widget):
     movePosition = NumericProperty(800)
@@ -74,11 +92,11 @@ class Jumper(Widget):
     jumpBool = NumericProperty(1)
     crouchBool = NumericProperty(1)
     jumpHeight = NumericProperty(350)
-    crouchHeight = NumericProperty(20)
+    crouchHeight = NumericProperty(10)
     floorHeight = NumericProperty(150)
 
     jumpSpeed = NumericProperty(2.5)
-    crouchSpeed = NumericProperty(2)
+    crouchSpeed = NumericProperty(1.5)
 
     label = 'SCROLLER'
 

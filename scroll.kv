@@ -10,14 +10,20 @@
             pos: 0, 0
             size: self.width, 150
         Rectangle:
-            source: 'ladder.png'
+            source: 'resources/ladder.png'
             pos: 50, 5
             size: 70, 200
 
     Label:
         font_size: 70  
-        center_x: root.width / 2
-        top: root.top - 50
+        center_x: root.width / 10
+        top: root.top - 15
+        text: str(root.score)
+
+    Label:
+        font_size: 70  
+        center_x: (root.width / 2)
+        top: root.top - 15
         text: root.jumper.label
     
     Jumper:
@@ -36,7 +42,7 @@
     size: 80, 110
     canvas:
         Rectangle:
-            source: 'bionicle.png'
+            source: 'resources/bionicle.png'
             pos:self.pos
             size:self.size
 
@@ -44,7 +50,7 @@
     size: 60, 75
     canvas:
         Ellipse:
-            source: 'flying_doge.png'
+            source: 'resources/flying_doge.png'
             pos:self.pos
             size:self.size
 
@@ -52,6 +58,6 @@
     size: 60, 75
     canvas:
         Ellipse:
-            source: 'flying_doge.png'
+            source: 'resources/flying_doge.png'
             pos:self.pos
             size:self.size
