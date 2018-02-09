@@ -1,13 +1,14 @@
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty,\
+from kivy.properties import NumericProperty, StringProperty, ReferenceListProperty,\
     ObjectProperty
 from kivy.vector import Vector
 from kivy.clock import Clock                              
 
 class ScrollGame(Widget):
     score = NumericProperty(0)
+    labelMain = StringProperty("SCROLLER")
     secondUpdate = NumericProperty(0)
     jumper = ObjectProperty(None)
     regularenemy = ObjectProperty(None)
@@ -58,6 +59,8 @@ class ScrollGame(Widget):
             if (not self.secondUpdate < 5):
                 self.score += 1
                 self.secondUpdate = 0
+        else:
+            self.labelMain = "GAME OVER"
 
 class RegularEnemy(Widget):
     movePosition = NumericProperty(800)
